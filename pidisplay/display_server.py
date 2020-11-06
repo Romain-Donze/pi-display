@@ -50,8 +50,15 @@ class DisplayServer(object):
             
             self.draw.rectangle((0, 0, self.image.width, self.image.height), outline=0, fill=0)
 
-            # set IP address
+	    # set hostname
             top = -2
+	    if network_hostname() is not None:
+                self.draw.text((4, top), 'HostName: ' + str(network_hostname()), font=self.font, fill=255)
+	    else:
+                self.draw.text((4, top), 'HostName: not available')
+
+            # set IP address
+            top = 6
             if ip_address('eth0') is not None:
                 self.draw.text((4, top), 'IP: ' + str(ip_address('eth0')), font=self.font, fill=255)
             elif ip_address('wlan0') is not None:
@@ -59,8 +66,8 @@ class DisplayServer(object):
             else:
                 self.draw.text((4, top), 'IP: not available')
 
-            top = 6
-            
+	    # set PWR infos
+            top = 14
             if(self.ina != None):
                 bus_voltage = self.ina.getBusVoltage_V()        # voltage on V- (load side)
                 current = self.ina.getCurrent_mA()                # current in mA
@@ -77,7 +84,7 @@ class DisplayServer(object):
                     self.draw.text((600, -2), ' ', font=self.font, fill=255)
                 else:
                     self.draw.text((120, -2), '*', font=self.font, fill=255)
-                self.draw.text((4, top),  (" %.1fV")%bus_voltage + (" %.2fA")%(current/1000) + (" %2.0f%%")%p, font=self.font, fill=255)
+                self.draw.text((4, top),  'PW: ' + ("%.1fV")%bus_voltage + (" %.2fA")%(current/1000) + (" %2.0f%%")%p, font=self.font, fill=255)
             elif(self.ina219 != None):
                 bus_voltage = self.ina219.getBusVoltage_V()        # voltage on V- (load side)
                 current = self.ina219.getCurrent_mA()                # current in mA
@@ -101,20 +108,20 @@ class DisplayServer(object):
                 if(p > 100):p = 100
                 self.draw.text((4, top), 'PWR: '  + ("  %.1fV")%value + ("  %2.0f%%")%p, font=self.font, fill=255)
             else:
-                self.draw.text((4, top), 'PWR No Detection' , font=self.font, fill=255)
+                self.draw.text((4, top), ' ' , font=self.font, fill=255)
                 
             
             # set stats headers
-            top = 14
+            top = 22
             offset = 4 * 8
-            headers = ['CPU', 'RAM', 'DSK', 'TMP']
+            headers = ['CPU', 'RAM', 'DISK', 'TMP']
             for i, header in enumerate(headers):
                 self.draw.text((i * offset + 4, top), header, font=self.font, fill=255)
 
             # set stats fields
-            top = 22
+            top = 30
                                                             
-            cpu_percent = '%2d%%' % int(round(cpu_usage() * 100.0, 1))
+            cpu_percent = '%2d%%' % int(round(cpu_usage() * 100.0 / 4.0, 1))
             ram_percent = '%2d%%' % int(round(memory_usage() * 100.0, 1))
             disk_percent = '%2d%%' % int(round(disk_usage() * 100.0, 1))
             temp_percent = '%2d' % int(round(temp(), 1))

@@ -22,6 +22,13 @@ def ip_address(interface):
     except:
         return None
 
+def network_hostname():
+    try:
+        cmd = "hostname"
+        return subprocess.check_output(cmd, shell=True).decode('ascii')[:-1]
+    except:
+        return None
+
 
 def network_interface_state(interface):
     try:
@@ -32,8 +39,7 @@ def network_interface_state(interface):
 
     
 def cpu_usage():
-    """Gets the Jetson's current CPU usage fraction
-    
+    """
     Returns:
         float: The current CPU usage fraction.
     """
@@ -41,8 +47,7 @@ def cpu_usage():
 
     
 def memory_usage():
-    """Gets the Jetson's current RAM memory usage fraction
-    
+    """
     Returns:
         float: The current RAM usage fraction.
     """
@@ -50,15 +55,14 @@ def memory_usage():
 
 
 def disk_usage():
-    """Gets the Jetson's current disk memory usage fraction
-    
+    """
     Returns:
         float: The current disk usage fraction.
     """
     return float(subprocess.check_output("df -h | awk '$NF==\"/\"{printf \"%s\", $5}'", shell = True ).decode('utf-8').strip('%')) / 100.0
     
 def temp():
-    """Gets the temperature
+    """
     Returns:
         float: The current cpu temperature.
     """
