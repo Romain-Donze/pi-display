@@ -83,7 +83,7 @@ class DisplayServer(object):
                     self.draw.text((600, -2), ' ', font=self.font, fill=255)
                 else:
                     self.draw.text((120, -2), '*', font=self.font, fill=255)
-                self.draw.text((5, top),  'PWR: ' + ("%.1fV")%bus_voltage + (" %.2fA")%(current/1000) + (" %2.0f%%")%p, font=self.font, fill=255)
+                self.draw.text((3, top),  'PWR: ' + ("%.1fV")%bus_voltage + (" %.2fA")%(current/1000) + (" %2.0f%%")%p, font=self.font, fill=255)
             elif(self.ina219 != None):
                 bus_voltage = self.ina219.getBusVoltage_V()        # voltage on V- (load side)
                 current = self.ina219.getCurrent_mA()                # current in mA
@@ -118,14 +118,14 @@ class DisplayServer(object):
 
             # set stats fields
             top = 22
-            offset = 5 * 8
+            offset = 5 * 10
 
             cpu_percent = '%2d%%' % int(round(cpu_usage() * 100.0 / 4.0, 1))
             ram_percent = '%2d%%' % int(round(memory_usage() * 100.0, 1))
             disk_percent = '%2d%%' % int(round(disk_usage() * 100.0, 1))
             temp_percent = '%2d' % int(round(temp(), 1))
             
-            entries = ['CPU:'+cpu_percent, 'RAM:'+ram_percent, 'TMP:'+temp_percent]
+            entries = ['CPU:'+cpu_percent, 'RAM:'+ram_percent, temp_percent+'°C']
             for i, entry in enumerate(entries):
                 self.draw.text((i * offset + 3, top), entry, font=self.font, fill=255)
 
