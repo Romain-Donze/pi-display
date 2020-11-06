@@ -5,7 +5,7 @@ import PIL.Image
 import PIL.ImageFont
 import PIL.ImageDraw
 from flask import Flask
-from .utils import ip_address, cpu_usage, memory_usage, disk_usage, temp
+from .utils import ip_address, network_hostname, cpu_usage, memory_usage, disk_usage, temp
 from pidisplay import ads1115
 from pidisplay import ina219
 import os
@@ -47,15 +47,14 @@ class DisplayServer(object):
     def _run_display_stats(self):
         Charge = False
         while self.stats_enabled:
-            
             self.draw.rectangle((0, 0, self.image.width, self.image.height), outline=0, fill=0)
 
-	    # set hostname
+            # set hostname
             top = -2
-	    if network_hostname() is not None:
-                self.draw.text((4, top), 'HostName: ' + str(network_hostname()), font=self.font, fill=255)
-	    else:
-                self.draw.text((4, top), 'HostName: not available')
+            if network_hostname() is not None:
+                    self.draw.text((4, top), 'HostName: ' + str(network_hostname()), font=self.font, fill=255)
+            else:
+                    self.draw.text((4, top), 'HostName: not available')
 
             # set IP address
             top = 6
@@ -66,7 +65,7 @@ class DisplayServer(object):
             else:
                 self.draw.text((4, top), 'IP: not available')
 
-	    # set PWR infos
+            # set PWR infos
             top = 14
             if(self.ina != None):
                 bus_voltage = self.ina.getBusVoltage_V()        # voltage on V- (load side)

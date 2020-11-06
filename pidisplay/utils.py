@@ -22,6 +22,7 @@ def ip_address(interface):
     except:
         return None
 
+
 def network_hostname():
     try:
         cmd = "hostname"
