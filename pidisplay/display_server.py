@@ -52,18 +52,18 @@ class DisplayServer(object):
             # set hostname
             top = -2
             if network_hostname() is not None:
-                self.draw.text((5, top), 'HostName: ' + str(network_hostname()), font=self.font, fill=255)
+                self.draw.text((3, top), 'HostName: ' + str(network_hostname()), font=self.font, fill=255)
             else:
-                self.draw.text((5, top), 'HostName: not available')
+                self.draw.text((3, top), 'HostName: not available')
 
             # set IP address
             top = 6
             if ip_address('eth0') is not None:
-                self.draw.text((5, top), 'IP: ' + str(ip_address('eth0')), font=self.font, fill=255)
+                self.draw.text((3, top), 'IP: ' + str(ip_address('eth0')), font=self.font, fill=255)
             elif ip_address('wlan0') is not None:
-                self.draw.text((5, top), 'IP: ' + str(ip_address('wlan0')), font=self.font, fill=255)
+                self.draw.text((3, top), 'IP: ' + str(ip_address('wlan0')), font=self.font, fill=255)
             else:
-                self.draw.text((5, top), 'IP: not available')
+                self.draw.text((3, top), 'IP: not available')
 
             # set PWR infos
             top = 14
@@ -105,9 +105,9 @@ class DisplayServer(object):
                 value=self.ads.readVoltage(4)/1000.0
                 p = value/12.6*100
                 if(p > 100):p = 100
-                self.draw.text((5, top), 'PWR: ' + ("  %.1fV")%value + ("  %2.0f%%")%p, font=self.font, fill=255)
+                self.draw.text((3, top), 'PWR: ' + ("  %.1fV")%value + ("  %2.0f%%")%p, font=self.font, fill=255)
             else:
-                self.draw.text((5, top), ' ', font=self.font, fill=255)
+                self.draw.text((3, top), ' ', font=self.font, fill=255)
 
             # set stats headers
             #top = 22
@@ -127,7 +127,7 @@ class DisplayServer(object):
             
             entries = ['CPU:'+cpu_percent, 'RAM:'+ram_percent, 'TMP:'+temp_percent]
             for i, entry in enumerate(entries):
-                self.draw.text((i * offset + 5, top), entry, font=self.font, fill=255)
+                self.draw.text((i * offset + 3, top), entry, font=self.font, fill=255)
 
             self.display.image(self.image)
             self.display.display()
