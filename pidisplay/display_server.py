@@ -100,7 +100,7 @@ class DisplayServer(object):
                     self.draw.text((600, -2), ' ', font=self.font, fill=255)
                 else:
                     self.draw.text((120, -2), '*', font=self.font, fill=255)
-                self.draw.text((5, top),  'PWR: ' + (" %.1fV")%bus_voltage + (" %.2fA")%(current/1000) + (" %2.0f%%")%p, font=self.font, fill=255)
+                self.draw.text((3, top),  'PWR: ' + (" %.1fV")%bus_voltage + (" %.2fA")%(current/1000) + (" %2.0f%%")%p, font=self.font, fill=255)
             elif(self.ads != None):
                 value=self.ads.readVoltage(4)/1000.0
                 p = value/12.6*100
@@ -118,7 +118,7 @@ class DisplayServer(object):
 
             # set stats fields
             top = 22
-            offset = 5 * 10
+            offset = 5 * 8
 
             cpu_percent = '%2d%%' % int(round(cpu_usage() * 100.0 / 4.0, 1))
             ram_percent = '%2d%%' % int(round(memory_usage() * 100.0, 1))
