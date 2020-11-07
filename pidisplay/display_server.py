@@ -121,7 +121,7 @@ class DisplayServer(object):
             temp_percent = '%2d' % int(round(temp(), 1))
             
             entry1 = 'CPU:'+cpu_percent + ' RAM:'+ram_percent
-            entry2 = temp_percent + '°C'
+            entry2 = temp_percent + '°'
             self.draw.text((0, top), entry1, font=self.font, fill=255)
             self.draw.text((110, top), entry2, font=self.font, fill=255)
 
