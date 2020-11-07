@@ -7,6 +7,8 @@ password=$1
 # install pip and some apt dependencies
 echo $password | sudo -S apt-get update
 echo $password | sudo -S apt install -y python3-pil python3-smbus
+wget http://kottke.org/plus/type/silkscreen/download/silkscreen.zip
+unzip silkscreen.zip
 
 # install pidisplay
 echo $password | sudo -S python3 setup.py install

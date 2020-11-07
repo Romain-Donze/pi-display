@@ -35,7 +35,7 @@ class DisplayServer(object):
         self.display.begin()
         self.display.clear()
         self.display.display()
-        self.font = PIL.ImageFont.truetype('/home/pi/slkscr.ttf', 8) #PIL.ImageFont.load_default()
+        self.font = PIL.ImageFont.truetype('../slkscr.ttf', 8) #PIL.ImageFont.load_default()
         self.image = PIL.Image.new('1', (self.display.width, self.display.height))
         self.draw = PIL.ImageDraw.Draw(self.image)
         self.draw.rectangle((0, 0, self.image.width, self.image.height), outline=0, fill=0)
