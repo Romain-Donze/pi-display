@@ -104,7 +104,7 @@ while True:
         p = (bus_voltage - 9)/3.6*100
         if(p > 100):p = 100
         if(p < 0):p = 0
-        if(current < 0):current = 0
+        #if(current < 0):current = 0
         if(current > 30):
             Charge = not Charge
         else:
