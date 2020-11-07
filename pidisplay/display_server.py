@@ -83,7 +83,8 @@ class DisplayServer(object):
                     self.draw.text((600, -2), ' ', font=self.font, fill=255)
                 else:
                     self.draw.text((120, -2), '*', font=self.font, fill=255)
-                self.draw.text((0, top),  'PWR: ' + ("%.1fV")%bus_voltage + (" %.2fA")%(current/1000) + ("   %2.0f%%")%p, font=self.font, fill=255)
+                self.draw.text((0, top), 'PWR: ' + ("%.1fV")%bus_voltage + (" %.2fA")%(current/1000), font=self.font, fill=255)
+                self.draw.text((110, top), ("%2.0f%%")%p, font=self.font, fill=255)
             elif(self.ina219 != None):
                 bus_voltage = self.ina219.getBusVoltage_V()        # voltage on V- (load side)
                 current = self.ina219.getCurrent_mA()                # current in mA
@@ -100,12 +101,14 @@ class DisplayServer(object):
                     self.draw.text((600, -2), ' ', font=self.font, fill=255)
                 else:
                     self.draw.text((120, -2), '*', font=self.font, fill=255)
-                self.draw.text((0, top),  'PWR: ' + (" %.1fV")%bus_voltage + (" %.2fA")%(current/1000) + ("   %2.0f%%")%p, font=self.font, fill=255)
+                self.draw.text((0, top), 'PWR: ' + ("%.1fV") % bus_voltage + (" %.2fA") % (current / 1000), font=self.font, fill=255)
+                self.draw.text((110, top), ("%2.0f%%") % p, font=self.font, fill=255)
             elif(self.ads != None):
                 value=self.ads.readVoltage(4)/1000.0
                 p = value/12.6*100
                 if(p > 100):p = 100
-                self.draw.text((0, top), 'PWR: ' + ("  %.1fV")%value + ("    %2.0f%%")%p, font=self.font, fill=255)
+                self.draw.text((0, top), 'PWR: ' + ("  %.1fV")%value, font=self.font, fill=255)
+                self.draw.text((110, top), ("%2.0f%%") % p, font=self.font, fill=255)
             else:
                 self.draw.text((0, top), ' ', font=self.font, fill=255)
 
@@ -117,8 +120,10 @@ class DisplayServer(object):
             disk_percent = '%2d%%' % int(round(disk_usage() * 100.0, 1))
             temp_percent = '%2d' % int(round(temp(), 1))
             
-            entry = 'CPU:'+cpu_percent + ' RAM:'+ram_percent + '   ' + temp_percent+'°C'
-            self.draw.text((0, top), entry, font=self.font, fill=255)
+            entry1 = 'CPU:'+cpu_percent + ' RAM:'+ram_percent
+            entry2 = temp_percent + '°C'
+            self.draw.text((0, top), entry1, font=self.font, fill=255)
+            self.draw.text((110, top), entry2, font=self.font, fill=255)
 
             self.display.image(self.image)
             self.display.display()
