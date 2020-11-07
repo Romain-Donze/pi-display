@@ -35,7 +35,7 @@ class DisplayServer(object):
         self.display.begin()
         self.display.clear()
         self.display.display()
-        self.font = PIL.ImageFont.truetype('../slkscr.ttf', 8) #PIL.ImageFont.load_default()
+        self.font = PIL.ImageFont.truetype('/home/pi/pi-display/pidisplay/slkscr.ttf', 8) #PIL.ImageFont.load_default()
         self.image = PIL.Image.new('1', (self.display.width, self.display.height))
         self.draw = PIL.ImageDraw.Draw(self.image)
         self.draw.rectangle((0, 0, self.image.width, self.image.height), outline=0, fill=0)
@@ -52,18 +52,18 @@ class DisplayServer(object):
             # set hostname
             top = -2
             if network_hostname() is not None:
-                self.draw.text((3, top), 'HostName: ' + str(network_hostname()), font=self.font, fill=255)
+                self.draw.text((0, top), 'HostName: ' + str(network_hostname()), font=self.font, fill=255)
             else:
                 self.draw.text((3, top), 'HostName: not available')
 
             # set IP address
             top = 6
             if ip_address('eth0') is not None:
-                self.draw.text((3, top), 'IP: ' + str(ip_address('eth0')), font=self.font, fill=255)
+                self.draw.text((0, top), 'IP: ' + str(ip_address('eth0')), font=self.font, fill=255)
             elif ip_address('wlan0') is not None:
-                self.draw.text((3, top), 'IP: ' + str(ip_address('wlan0')), font=self.font, fill=255)
+                self.draw.text((0, top), 'IP: ' + str(ip_address('wlan0')), font=self.font, fill=255)
             else:
-                self.draw.text((3, top), 'IP: not available')
+                self.draw.text((0, top), 'IP: not available')
 
             # set PWR infos
             top = 14
@@ -83,14 +83,14 @@ class DisplayServer(object):
                     self.draw.text((600, -2), ' ', font=self.font, fill=255)
                 else:
                     self.draw.text((120, -2), '*', font=self.font, fill=255)
-                self.draw.text((3, top),  'PWR: ' + ("%.1fV")%bus_voltage + (" %.2fA")%(current/1000) + (" %2.0f%%")%p, font=self.font, fill=255)
+                self.draw.text((0, top),  'PWR: ' + ("%.1fV")%bus_voltage + (" %.2fA")%(current/1000) + (" %2.0f%%")%p, font=self.font, fill=255)
             elif(self.ina219 != None):
                 bus_voltage = self.ina219.getBusVoltage_V()        # voltage on V- (load side)
                 current = self.ina219.getCurrent_mA()                # current in mA
                 p = (bus_voltage - 9)/3.6*100
                 if(p > 100):p = 100
                 if(p < 0):p = 0
-                if(current < 0):current = 0
+                #if(current < 0):current = 0
                 if(current > 30):
                     Charge = not Charge
                 else:
@@ -100,34 +100,25 @@ class DisplayServer(object):
                     self.draw.text((600, -2), ' ', font=self.font, fill=255)
                 else:
                     self.draw.text((120, -2), '*', font=self.font, fill=255)
-                self.draw.text((3, top),  'PWR: ' + (" %.1fV")%bus_voltage + (" %.2fA")%(current/1000) + (" %2.0f%%")%p, font=self.font, fill=255)
+                self.draw.text((0, top),  'PWR: ' + (" %.1fV")%bus_voltage + (" %.2fA")%(current/1000) + (" %2.0f%%")%p, font=self.font, fill=255)
             elif(self.ads != None):
                 value=self.ads.readVoltage(4)/1000.0
                 p = value/12.6*100
                 if(p > 100):p = 100
-                self.draw.text((3, top), 'PWR: ' + ("  %.1fV")%value + ("  %2.0f%%")%p, font=self.font, fill=255)
+                self.draw.text((0, top), 'PWR: ' + ("  %.1fV")%value + ("  %2.0f%%")%p, font=self.font, fill=255)
             else:
-                self.draw.text((3, top), ' ', font=self.font, fill=255)
-
-            # set stats headers
-            #top = 22
-            #offset = 5 * 8
-            #headers = ['CPU', 'RAM', 'TMP']
-            #for i, header in enumerate(headers):
-            #    self.draw.text((i * offset + 5, top), header, font=self.font, fill=255)
+                self.draw.text((0, top), ' ', font=self.font, fill=255)
 
             # set stats fields
             top = 22
-            offset = 5 * 10
 
             cpu_percent = '%2d%%' % int(round(cpu_usage() * 100.0 / 4.0, 1))
             ram_percent = '%2d%%' % int(round(memory_usage() * 100.0, 1))
             disk_percent = '%2d%%' % int(round(disk_usage() * 100.0, 1))
             temp_percent = '%2d' % int(round(temp(), 1))
             
-            entries = ['CPU:'+cpu_percent, 'RAM:'+ram_percent, temp_percent+'°C']
-            for i, entry in enumerate(entries):
-                self.draw.text((i * offset + 3, top), entry, font=self.font, fill=255)
+            entry = 'CPU:'+cpu_percent + ' RAM:'+ram_percent + ' ' + temp_percent+'°C'
+            self.draw.text((0, top), entry, font=self.font, fill=255)
 
             self.display.image(self.image)
             self.display.display()
